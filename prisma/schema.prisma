@@ -1,0 +1,65 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model comments {
+  comment_id      Int       @id @default(autoincrement())
+  user_id         Int?
+  image_id        Int?
+  comment_date    DateTime? @default(now()) @db.Timestamp(0)
+  comment_content String?   @db.VarChar(255)
+  created_at      DateTime? @default(now()) @db.Timestamp(0)
+  updated_at      DateTime? @default(now()) @db.Timestamp(0)
+  users           users?    @relation(fields: [user_id], references: [user_id], onDelete: NoAction, onUpdate: NoAction, map: "comments_ibfk_1")
+  images          images?   @relation(fields: [image_id], references: [image_id], onDelete: NoAction, onUpdate: NoAction, map: "comments_ibfk_2")
+
+  @@index([image_id], map: "image_id")
+  @@index([user_id], map: "user_id")
+}
+
+model images {
+  image_id    Int          @id @default(autoincrement())
+  image_name  String?      @db.VarChar(255)
+  link        String?      @db.VarChar(255)
+  description String?      @db.VarChar(255)
+  user_id     Int?
+  created_at  DateTime?    @default(now()) @db.Timestamp(0)
+  updated_at  DateTime?    @default(now()) @db.Timestamp(0)
+  comments    comments[]
+  users       users?       @relation(fields: [user_id], references: [user_id], onDelete: NoAction, onUpdate: NoAction, map: "images_ibfk_1")
+  save_image  save_image[]
+
+  @@index([user_id], map: "user_id")
+}
+
+model save_image {
+  user_id    Int
+  image_id   Int
+  save_date  DateTime? @default(now()) @db.Timestamp(0)
+  created_at DateTime? @default(now()) @db.Timestamp(0)
+  updated_at DateTime? @default(now()) @db.Timestamp(0)
+  users      users     @relation(fields: [user_id], references: [user_id], onDelete: NoAction, onUpdate: NoAction, map: "save_image_ibfk_1")
+  images     images    @relation(fields: [image_id], references: [image_id], onDelete: NoAction, onUpdate: NoAction, map: "save_image_ibfk_2")
+
+  @@id([user_id, image_id])
+  @@index([image_id], map: "image_id")
+}
+
+model users {
+  user_id    Int          @id @default(autoincrement())
+  email      String       @db.VarChar(255)
+  pass_word  String?      @db.VarChar(255)
+  full_name  String       @db.VarChar(255)
+  age        Int?
+  avatar     String?      @db.VarChar(255)
+  created_at DateTime?    @default(now()) @db.Timestamp(0)
+  updated_at DateTime?    @default(now()) @db.Timestamp(0)
+  comments   comments[]
+  images     images[]
+  save_image save_image[]
+}

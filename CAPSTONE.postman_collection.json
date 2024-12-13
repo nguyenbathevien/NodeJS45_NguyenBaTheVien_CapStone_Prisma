@@ -1,0 +1,576 @@
+{
+	"info": {
+		"_postman_id": "a8e13e61-e584-487a-bc5b-fac2ba8a742f",
+		"name": "CAPSTONE",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "38710565"
+	},
+	"item": [
+		{
+			"name": "auth",
+			"item": [
+				{
+					"name": "register",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\": \"thevien23@gmail.com\",\r\n    \"pass_word\": \"1234\",\r\n    \"full_name\": \"thevien\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3069/auth/register",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3069",
+							"path": [
+								"auth",
+								"register"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "login",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const response = pm.response.json();\r",
+									"\r",
+									"// Kiểm tra nếu `status` có giá trị là \"error\"\r",
+									"if (response.status === \"error\") return;\r",
+									"\r",
+									"// Kiểm tra nếu `metaData` tồn tại và có `accessToken` và `refreshToken`\r",
+									"if (response.metaData && response.metaData.accessToken && response.metaData.refreshToken) {\r",
+									"    const accessToken = response.metaData.accessToken;\r",
+									"    const refreshToken = response.metaData.refreshToken;\r",
+									"\r",
+									"    // Đặt các biến collection\r",
+									"    pm.collectionVariables.set(\"accessToken\", accessToken);\r",
+									"    pm.collectionVariables.set(\"refreshToken\", refreshToken);\r",
+									"} else {\r",
+									"    console.error(\"Missing accessToken or refreshToken in response\");\r",
+									"}"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\": \"thevien23@gmail.com\",\r\n    \"pass_word\": \"1234\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3069/auth/login",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3069",
+							"path": [
+								"auth",
+								"login"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "image",
+			"item": [
+				{
+					"name": "Lấy danh sách ảnh",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{accessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{domain}}image/listImage",
+							"host": [
+								"{{domain}}image"
+							],
+							"path": [
+								"listImage"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Lấy theo tên hình ảnh",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{accessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3069/image/nameImage?name=im",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3069",
+							"path": [
+								"image",
+								"nameImage"
+							],
+							"query": [
+								{
+									"key": "name",
+									"value": "im"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "detail",
+			"item": [
+				{
+					"name": "Lấy thông tin hình ảnh",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{accessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{domain}}detail/image/6",
+							"host": [
+								"{{domain}}detail"
+							],
+							"path": [
+								"image",
+								"6"
+							],
+							"query": [
+								{
+									"key": "id",
+									"value": "1",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Lấy bình luận theo id ảnh",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{accessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{domain}}detail/comment/2",
+							"host": [
+								"{{domain}}detail"
+							],
+							"path": [
+								"comment",
+								"2"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Lấy thông tin lưu hình",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{accessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{domain}}detail/saveImage/3",
+							"host": [
+								"{{domain}}detail"
+							],
+							"path": [
+								"saveImage",
+								"3"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Thêm bình luận",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{accessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"idImage\": 2,\r\n  \"content\": \"Hình đẹp thế!\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{domain}}detail/comment",
+							"host": [
+								"{{domain}}detail"
+							],
+							"path": [
+								"comment"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Thêm ảnh",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{accessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"nameImg\": \"Baroibeo\", \r\n  \"url\": \"https://baga.com/image.jpg\", \r\n  \"description\": \"Thầy giáo ba\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{domain}}detail/image",
+							"host": [
+								"{{domain}}detail"
+							],
+							"path": [
+								"image"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Lưu ảnh",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{accessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{domain}}detail/saveImage/3",
+							"host": [
+								"{{domain}}detail"
+							],
+							"path": [
+								"saveImage",
+								"3"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "manage",
+			"item": [
+				{
+					"name": "Lấy thông tin người dùng",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{accessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{domain}}manage/user/3",
+							"host": [
+								"{{domain}}manage"
+							],
+							"path": [
+								"user",
+								"3"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Lấy ảnh đã lưu",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{accessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{domain}}manage/save-images",
+							"host": [
+								"{{domain}}manage"
+							],
+							"path": [
+								"save-images"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Lấy danh sách ảnh đã tạo theo người dùng",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{accessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{domain}}manage/images/6",
+							"host": [
+								"{{domain}}manage"
+							],
+							"path": [
+								"images",
+								"6"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Xóa ảnh theo id hình",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{accessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{domain}}manage/images/6",
+							"host": [
+								"{{domain}}manage"
+							],
+							"path": [
+								"images",
+								"6"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "user",
+			"item": [
+				{
+					"name": "sửa thông tin người dùng",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{accessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"fullname\": \"vienkhongngu\",\r\n  \"age\": \"22\",\r\n  \"email\": \"thevien23@gmail.com\"\r\n  \r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{domain}}user/edit",
+							"host": [
+								"{{domain}}user"
+							],
+							"path": [
+								"edit"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Test Server",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:3069",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3069"
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "domain",
+			"value": "http://localhost:3069/",
+			"type": "string"
+		},
+		{
+			"key": "accessToken",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "refreshToken",
+			"value": "",
+			"type": "string"
+		}
+	]
+}
